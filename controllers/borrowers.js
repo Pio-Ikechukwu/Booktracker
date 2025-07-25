@@ -90,6 +90,8 @@ exports.returnBook = async (req, res) => {
     book.location = "shelf";
     await book.save();
 
+    await Borrower.findByIdAndDelete(req.params.id);
+
     res.status(200).json({ success: true, message: "Book returned" });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
