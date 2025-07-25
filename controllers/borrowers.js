@@ -5,7 +5,10 @@ const Book = require("../models/Book");
 // route = GET api/v1/borrowers
 exports.getBorrowers = async (req, res) => {
   try {
-    const borrowers = await Borrower.find().populate("book");
+    const borrowers = await Borrower.find({ returnedAt: null }).populate(
+      "book"
+    );
+
     res
       .status(200)
       .json({ success: true, count: borrowers.length, data: borrowers });
@@ -33,7 +36,7 @@ exports.getBorrowerById = async (req, res) => {
 // Add borrower
 // route = POST api/v1/borrowers
 exports.createBorrower = async (req, res) => {
-  const { name, bookId } = req.body;
+  const { name, bookId, dueDate } = req.body;
 
   try {
     // Check if book is already loaned out
@@ -56,7 +59,7 @@ exports.createBorrower = async (req, res) => {
     book.location = "loaned";
     await book.save();
 
-    const borrower = await Borrower.create({ name, book: bookId });
+    const borrower = await Borrower.create({ name, book: bookId, dueDate });
     res.status(201).json({ success: true, data: borrower });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });

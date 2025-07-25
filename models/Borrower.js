@@ -10,7 +10,6 @@ const BorrowerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Book",
     required: [true, "Book being borrowed is required"],
-    unique: true,
   },
 
   borrowedAt: {
@@ -21,6 +20,11 @@ const BorrowerSchema = new mongoose.Schema({
   dueDate: {
     type: Date,
     required: [true, "Due date is required"],
+  },
+
+  returnedAt: {
+    type: Date,
+    default: null,
   },
 
   returned: {
